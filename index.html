@@ -176,104 +176,106 @@
           <p class="section-desc">The high command of TABL. Hover or click nodes to synchronize dossiers and access encrypted neural profiles.</p>
 
           <div class="triangle-container">
-            <!-- Connecting SVG Lines with Glowing Dash Animation -->
-            <svg class="triangle-links-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <!-- Definitions for glowing filter effects -->
-              <defs>
-                <filter id="glow-heavy" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <!-- Lines linking apex to base, and base sides -->
-              <line x1="50" y1="12" x2="18" y2="78" class="conduit-line" id="line-ceo-cfo" />
-              <line x1="50" y1="12" x2="82" y2="78" class="conduit-line" id="line-ceo-cto" />
-              <line x1="18" y1="78" x2="82" y2="78" class="conduit-line" id="line-cfo-cto" />
-            </svg>
+            <div class="triangle-orbit">
+              <!-- Connecting SVG Lines with Glowing Dash Animation -->
+              <svg class="triangle-links-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <!-- Definitions for glowing filter effects -->
+                <defs>
+                  <filter id="glow-heavy" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+                <!-- Lines linking apex to base, and base sides -->
+                <line x1="50" y1="12" x2="18" y2="78" class="conduit-line" id="line-ceo-cfo" />
+                <line x1="50" y1="12" x2="82" y2="78" class="conduit-line" id="line-ceo-cto" />
+                <line x1="18" y1="78" x2="82" y2="78" class="conduit-line" id="line-cfo-cto" />
+              </svg>
 
-            <!-- Apex: Zaid Khan (CEO) -->
-            <div class="triumvirate-node node-ceo" id="node-zaid" data-member="zaid">
-              <div class="node-glow-ring"></div>
-              <div class="node-border">
-                <div class="node-corner top-l"></div>
-                <div class="node-corner top-r"></div>
-                <div class="node-corner bottom-l"></div>
-                <div class="node-corner bottom-r"></div>
-                
-                <div class="node-avatar-box">
-                  <div class="avatar-hud">
-                    <div class="hud-circle scan"></div>
-                    <div class="hud-crosshair"></div>
+              <!-- Apex: Zaid Khan (CEO) -->
+              <div class="triumvirate-node node-ceo" id="node-zaid" data-member="zaid">
+                <div class="node-glow-ring"></div>
+                <div class="node-border">
+                  <div class="node-corner top-l"></div>
+                  <div class="node-corner top-r"></div>
+                  <div class="node-corner bottom-l"></div>
+                  <div class="node-corner bottom-r"></div>
+                  
+                  <div class="node-avatar-box">
+                    <div class="avatar-hud">
+                      <div class="hud-circle scan"></div>
+                      <div class="hud-crosshair"></div>
+                    </div>
+                    <!-- SVG representation of leadership -->
+                    <svg viewBox="0 0 100 100" class="avatar-svg">
+                      <circle cx="50" cy="40" r="18" class="avatar-head" />
+                      <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
+                      <path d="M50 15 L 43 28 L 57 28 Z" class="avatar-crown" />
+                    </svg>
                   </div>
-                  <!-- SVG representation of leadership -->
-                  <svg viewBox="0 0 100 100" class="avatar-svg">
-                    <circle cx="50" cy="40" r="18" class="avatar-head" />
-                    <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
-                    <path d="M50 15 L 43 28 L 57 28 Z" class="avatar-crown" />
-                  </svg>
-                </div>
-                <div class="node-info">
-                  <span class="node-role">APEX // CEO</span>
-                  <h4 class="node-name" data-decrypt="ZAID KHAN">ZAID KHAN</h4>
+                  <div class="node-info">
+                    <span class="node-role">APEX // CEO</span>
+                    <h4 class="node-name" data-decrypt="ZAID KHAN">ZAID KHAN</h4>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Bottom Left: Aniket Saini (CFO) -->
-            <div class="triumvirate-node node-cfo" id="node-aniket" data-member="aniket">
-              <div class="node-glow-ring"></div>
-              <div class="node-border">
-                <div class="node-corner top-l"></div>
-                <div class="node-corner top-r"></div>
-                <div class="node-corner bottom-l"></div>
-                <div class="node-corner bottom-r"></div>
-                
-                <div class="node-avatar-box">
-                  <div class="avatar-hud">
-                    <div class="hud-circle rotate"></div>
-                    <div class="hud-crosshair"></div>
+              <!-- Bottom Left: Aniket Saini (CFO) -->
+              <div class="triumvirate-node node-cfo" id="node-aniket" data-member="aniket">
+                <div class="node-glow-ring"></div>
+                <div class="node-border">
+                  <div class="node-corner top-l"></div>
+                  <div class="node-corner top-r"></div>
+                  <div class="node-corner bottom-l"></div>
+                  <div class="node-corner bottom-r"></div>
+                  
+                  <div class="node-avatar-box">
+                    <div class="avatar-hud">
+                      <div class="hud-circle rotate"></div>
+                      <div class="hud-crosshair"></div>
+                    </div>
+                    <svg viewBox="0 0 100 100" class="avatar-svg">
+                      <circle cx="50" cy="40" r="18" class="avatar-head" />
+                      <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
+                      <!-- Dollar sign or finance grid in stylized form -->
+                      <circle cx="50" cy="50" r="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2" />
+                    </svg>
                   </div>
-                  <svg viewBox="0 0 100 100" class="avatar-svg">
-                    <circle cx="50" cy="40" r="18" class="avatar-head" />
-                    <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
-                    <!-- Dollar sign or finance grid in stylized form -->
-                    <circle cx="50" cy="50" r="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2" />
-                  </svg>
-                </div>
-                <div class="node-info">
-                  <span class="node-role">BASE-L // CFO</span>
-                  <h4 class="node-name" data-decrypt="ANIKET SAINI">ANIKET SAINI</h4>
+                  <div class="node-info">
+                    <span class="node-role">BASE-L // CFO</span>
+                    <h4 class="node-name" data-decrypt="ANIKET SAINI">ANIKET SAINI</h4>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Bottom Right: Syed M Jafri (CTO) -->
-            <div class="triumvirate-node node-cto" id="node-syed" data-member="syed">
-              <div class="node-glow-ring"></div>
-              <div class="node-border">
-                <div class="node-corner top-l"></div>
-                <div class="node-corner top-r"></div>
-                <div class="node-corner bottom-l"></div>
-                <div class="node-corner bottom-r"></div>
-                
-                <div class="node-avatar-box">
-                  <div class="avatar-hud">
-                    <div class="hud-circle pulse"></div>
-                    <div class="hud-crosshair"></div>
+              <!-- Bottom Right: Syed M Jafri (CTO) -->
+              <div class="triumvirate-node node-cto" id="node-syed" data-member="syed">
+                <div class="node-glow-ring"></div>
+                <div class="node-border">
+                  <div class="node-corner top-l"></div>
+                  <div class="node-corner top-r"></div>
+                  <div class="node-corner bottom-l"></div>
+                  <div class="node-corner bottom-r"></div>
+                  
+                  <div class="node-avatar-box">
+                    <div class="avatar-hud">
+                      <div class="hud-circle pulse"></div>
+                      <div class="hud-crosshair"></div>
+                    </div>
+                    <svg viewBox="0 0 100 100" class="avatar-svg">
+                      <circle cx="50" cy="40" r="18" class="avatar-head" />
+                      <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
+                      <!-- Code brackets representation inside vector -->
+                      <path d="M38 42 L 32 48 L 38 54 M62 42 L 68 48 L 62 54" stroke="currentColor" stroke-width="2" fill="none" />
+                    </svg>
                   </div>
-                  <svg viewBox="0 0 100 100" class="avatar-svg">
-                    <circle cx="50" cy="40" r="18" class="avatar-head" />
-                    <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
-                    <!-- Code brackets representation inside vector -->
-                    <path d="M38 42 L 32 48 L 38 54 M62 42 L 68 48 L 62 54" stroke="currentColor" stroke-width="2" fill="none" />
-                  </svg>
-                </div>
-                <div class="node-info">
-                  <span class="node-role">BASE-R // CTO</span>
-                  <h4 class="node-name" data-decrypt="SYED M JAFRI">SYED M JAFRI</h4>
+                  <div class="node-info">
+                    <span class="node-role">BASE-R // CTO</span>
+                    <h4 class="node-name" data-decrypt="SYED M JAFRI">SYED M JAFRI</h4>
+                  </div>
                 </div>
               </div>
             </div>

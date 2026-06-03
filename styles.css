@@ -721,6 +721,21 @@ body {
   background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.015) 0%, transparent 70%);
 }
 
+.triangle-orbit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: triangle-rotate 45s linear infinite;
+}
+
+/* Pause the orbit rotation on hover of the overall container so the user can easily read/click nodes */
+.triangle-container:hover .triangle-orbit,
+.triangle-container:hover .triumvirate-node .node-border {
+  animation-play-state: paused;
+}
+
 .triangle-links-svg {
   position: absolute;
   top: 0;
@@ -800,6 +815,7 @@ body {
   flex-direction: column;
   align-items: center;
   transition: all var(--transition-speed) ease;
+  animation: node-counter-rotate 45s linear infinite;
 }
 
 .triumvirate-node:hover .node-border,
@@ -1517,6 +1533,16 @@ h4.group-value {
 @keyframes wave-bar {
   0% { height: 2px; }
   100% { height: 12px; }
+}
+
+@keyframes triangle-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes node-counter-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
 }
 
 @keyframes section-enter {
