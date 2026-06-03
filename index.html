@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TABL // Secret Society Console</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Scanlines & Noise overlays for CRT look -->
+  <div class="crt-overlay"></div>
+  <div class="crt-flicker"></div>
+  <div class="terminal-noise"></div>
+
+  <!-- Background Canvas for Interactive Particles -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- 1. ENTRY SCREEN -->
+  <section id="entry-screen" class="entry-screen">
+    <div class="entry-frame">
+      <div class="corner-bracket top-left"></div>
+      <div class="corner-bracket top-right"></div>
+      <div class="corner-bracket bottom-left"></div>
+      <div class="corner-bracket bottom-right"></div>
+
+      <!-- Glowing Logo -->
+      <div class="logo-wrapper">
+        <div class="logo-glitch">
+          <svg class="tabl-logo big-logo" viewBox="0 0 120 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="5" y1="12" x2="48" y2="12" />
+            <line x1="53" y1="5" x2="67" y2="19" />
+            <line x1="53" y1="19" x2="67" y2="5" />
+            <line x1="72" y1="12" x2="115" y2="12" />
+          </svg>
+        </div>
+        <p class="logo-subtitle">TABL SECURE GRID CONNECTION</p>
+      </div>
+
+      <!-- Biometric Scanner -->
+      <div class="scanner-container" id="biometric-scanner">
+        <div class="scanner-ring">
+          <svg class="scanner-svg" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" class="ring-bg" />
+            <circle cx="50" cy="50" r="45" class="ring-active" />
+          </svg>
+          <div class="fingerprint-icon">
+            <!-- Sleek SVG Fingerprint -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10" />
+              <path d="M5 12c0-3.87 3.13-7 7-7s7 3.13 7 7" />
+              <path d="M8 12c0-2.21 1.79-4 4-4s4 1.79 4 4" />
+              <path d="M12 8v8" />
+              <path d="M12 22c5.52 0 10-4.48 10-10" />
+              <path d="M12 18c2.21 0 4-1.79 4-4" />
+              <path d="M8 14c0 2.21 1.79 4 4 4" />
+              <path d="M19 12c0 3.87-3.13 7-7 7" />
+              <path d="M2 12c0 5.52 4.48 10 10 10" />
+              <path d="M15 12c0-1.66-1.34-3-3-3s-3 1.34-3 3" />
+            </svg>
+          </div>
+          <div class="scanner-laser"></div>
+        </div>
+        <p class="scan-status" id="scan-status">INITIALIZING SCANNER...</p>
+      </div>
+
+      <!-- Manual Passcode Input -->
+      <div class="passcode-container">
+        <div class="passcode-input-wrapper">
+          <span class="prompt-arrow">&gt;</span>
+          <input type="password" id="entry-passcode" placeholder="ENTER ACCESS KEY" autocomplete="off" maxlength="16">
+        </div>
+        <div class="passcode-buttons">
+          <button id="btn-submit-pass" class="glow-button">DECRYPT</button>
+          <button id="btn-bypass" class="glow-button secondary">BYPASS BIO-SCAN</button>
+        </div>
+      </div>
+
+      <div class="entry-footer">
+        <span class="warning-text">WARNING: UNAUTHORIZED ACCESS IS LOGGED AND TERMINATED INSTANTLY</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. MAIN CONSOLE SCREEN -->
+  <main id="console-screen" class="console-screen hidden">
+    <!-- Header bar -->
+    <header class="console-header">
+      <div class="header-left">
+        <div class="header-logo">
+          <svg class="tabl-logo header-logo-svg" viewBox="0 0 120 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+            <line x1="5" y1="12" x2="48" y2="12" />
+            <line x1="53" y1="5" x2="67" y2="19" />
+            <line x1="53" y1="19" x2="67" y2="5" />
+            <line x1="72" y1="12" x2="115" y2="12" />
+          </svg>
+        </div>
+        <div class="header-title-container">
+          <h2 class="header-title">TABL // SECURE NETWORK</h2>
+          <div class="header-meta">SYS_LEVEL: OMEGA // NODES: ACTIVE</div>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="ticker-wrap">
+          <div class="ticker-content" id="ticker-text">
+            SECURE LOG: INITIALIZED // ZAID KHAN IS ONLINE // ANIKET SAINI SYNCED // SYED M JAFRI CONNECTED // DECRYPTING DATA STREAM...
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="system-time" id="system-time">00:00:00 UTC</div>
+        <button id="audio-toggle" class="audio-btn" aria-label="Toggle System Ambient Hum">
+          <span class="audio-wave">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span class="audio-label">SOUND: ON</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Grid Layout -->
+    <div class="console-grid">
+      
+      <!-- Side Navigation Panel -->
+      <nav class="side-panel">
+        <div class="panel-header">
+          <h3>SYSTEM INDEX</h3>
+        </div>
+        <ul class="nav-list">
+          <li class="active" data-section="section-triumvirate">
+            <span class="nav-num">01</span>
+            <span class="nav-text">TRIUMVIRATE</span>
+          </li>
+          <li data-section="section-terminal">
+            <span class="nav-num">02</span>
+            <span class="nav-text">COMM TERMINAL</span>
+          </li>
+          <li data-section="section-ops">
+            <span class="nav-num">03</span>
+            <span class="nav-text">OPERATIONS</span>
+          </li>
+          <li data-section="section-codex">
+            <span class="nav-num">04</span>
+            <span class="nav-text">TABL CODEX</span>
+          </li>
+        </ul>
+
+        <div class="terminal-stats-mini">
+          <div class="stat-line">
+            <span>MEMBERS STATUS</span>
+            <span class="stat-value text-glowing">SYNCED</span>
+          </div>
+          <div class="stat-line">
+            <span>COORDINATES</span>
+            <span class="stat-value" id="mini-coords">40.7128° N, 74.0060° W</span>
+          </div>
+          <div class="stat-line">
+            <span>ENCRYPTION</span>
+            <span class="stat-value">RSA-8192</span>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content Area -->
+      <div class="content-viewport" id="content-viewport">
+
+        <!-- SECTION 1: THE TRIUMVIRATE (Triangle Leadership) -->
+        <section id="section-triumvirate" class="content-section active-section">
+          <div class="section-title-bar">
+            <span class="section-tag">[SEC_01]</span>
+            <h3 class="section-title">THE TRIUMVIRATE</h3>
+          </div>
+          <p class="section-desc">The high command of TABL. Hover or click nodes to synchronize dossiers and access encrypted neural profiles.</p>
+
+          <div class="triangle-container">
+            <!-- Connecting SVG Lines with Glowing Dash Animation -->
+            <svg class="triangle-links-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <!-- Definitions for glowing filter effects -->
+              <defs>
+                <filter id="glow-heavy" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- Lines linking apex to base, and base sides -->
+              <line x1="50" y1="12" x2="18" y2="78" class="conduit-line" id="line-ceo-cfo" />
+              <line x1="50" y1="12" x2="82" y2="78" class="conduit-line" id="line-ceo-cto" />
+              <line x1="18" y1="78" x2="82" y2="78" class="conduit-line" id="line-cfo-cto" />
+            </svg>
+
+            <!-- Apex: Zaid Khan (CEO) -->
+            <div class="triumvirate-node node-ceo" id="node-zaid" data-member="zaid">
+              <div class="node-glow-ring"></div>
+              <div class="node-border">
+                <div class="node-corner top-l"></div>
+                <div class="node-corner top-r"></div>
+                <div class="node-corner bottom-l"></div>
+                <div class="node-corner bottom-r"></div>
+                
+                <div class="node-avatar-box">
+                  <div class="avatar-hud">
+                    <div class="hud-circle scan"></div>
+                    <div class="hud-crosshair"></div>
+                  </div>
+                  <!-- SVG representation of leadership -->
+                  <svg viewBox="0 0 100 100" class="avatar-svg">
+                    <circle cx="50" cy="40" r="18" class="avatar-head" />
+                    <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
+                    <path d="M50 15 L 43 28 L 57 28 Z" class="avatar-crown" />
+                  </svg>
+                </div>
+                <div class="node-info">
+                  <span class="node-role">APEX // CEO</span>
+                  <h4 class="node-name" data-decrypt="ZAID KHAN">ZAID KHAN</h4>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Left: Aniket Saini (CFO) -->
+            <div class="triumvirate-node node-cfo" id="node-aniket" data-member="aniket">
+              <div class="node-glow-ring"></div>
+              <div class="node-border">
+                <div class="node-corner top-l"></div>
+                <div class="node-corner top-r"></div>
+                <div class="node-corner bottom-l"></div>
+                <div class="node-corner bottom-r"></div>
+                
+                <div class="node-avatar-box">
+                  <div class="avatar-hud">
+                    <div class="hud-circle rotate"></div>
+                    <div class="hud-crosshair"></div>
+                  </div>
+                  <svg viewBox="0 0 100 100" class="avatar-svg">
+                    <circle cx="50" cy="40" r="18" class="avatar-head" />
+                    <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
+                    <!-- Dollar sign or finance grid in stylized form -->
+                    <circle cx="50" cy="50" r="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2" />
+                  </svg>
+                </div>
+                <div class="node-info">
+                  <span class="node-role">BASE-L // CFO</span>
+                  <h4 class="node-name" data-decrypt="ANIKET SAINI">ANIKET SAINI</h4>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Right: Syed M Jafri (CTO) -->
+            <div class="triumvirate-node node-cto" id="node-syed" data-member="syed">
+              <div class="node-glow-ring"></div>
+              <div class="node-border">
+                <div class="node-corner top-l"></div>
+                <div class="node-corner top-r"></div>
+                <div class="node-corner bottom-l"></div>
+                <div class="node-corner bottom-r"></div>
+                
+                <div class="node-avatar-box">
+                  <div class="avatar-hud">
+                    <div class="hud-circle pulse"></div>
+                    <div class="hud-crosshair"></div>
+                  </div>
+                  <svg viewBox="0 0 100 100" class="avatar-svg">
+                    <circle cx="50" cy="40" r="18" class="avatar-head" />
+                    <path d="M25 80 C 25 60, 75 60, 75 80" class="avatar-shoulders" />
+                    <!-- Code brackets representation inside vector -->
+                    <path d="M38 42 L 32 48 L 38 54 M62 42 L 68 48 L 62 54" stroke="currentColor" stroke-width="2" fill="none" />
+                  </svg>
+                </div>
+                <div class="node-info">
+                  <span class="node-role">BASE-R // CTO</span>
+                  <h4 class="node-name" data-decrypt="SYED M JAFRI">SYED M JAFRI</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Central Dashboard Output (Active dossier summarizer) -->
+          <div class="triumvirate-console-box" id="node-quick-details">
+            <div class="box-header">
+              <span class="terminal-indicator"></span>
+              <h4>TRIUMVIRATE SYSTEM BROADCAST</h4>
+            </div>
+            <div class="box-body">
+              <p id="broadcast-message">SYSTEM LINK STABLE. SELECTION NECESSARY TO INTERROGATE DOSSIER LOGS.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: COMM TERMINAL -->
+        <section id="section-terminal" class="content-section">
+          <div class="section-title-bar">
+            <span class="section-tag">[SEC_02]</span>
+            <h3 class="section-title">COMM TERMINAL</h3>
+          </div>
+          <p class="section-desc">Interactive command interface to the TABL mainframe database. Type commands directly to communicate with the system.</p>
+
+          <div class="terminal-device">
+            <div class="terminal-bezel-reflection"></div>
+            <div class="terminal-header-bar">
+              <div class="window-dot-red"></div>
+              <div class="window-dot-yellow"></div>
+              <div class="window-dot-green"></div>
+              <span class="terminal-window-title">TABL-COMM-PORT_V4.02 // TTY0</span>
+            </div>
+            
+            <div class="terminal-screen" id="terminal-screen">
+              <div class="terminal-scroll-area" id="terminal-log">
+                <div class="terminal-line system-msg">TABL Secure Operating System v9.8.1-Omega</div>
+                <div class="terminal-line system-msg">Establish terminal interface link... SUCCESS.</div>
+                <div class="terminal-line system-msg">Encryption handshake: 8192-bit cryptographic keys.</div>
+                <div class="terminal-line warning-msg">CAUTION: System activities are monitored internally.</div>
+                <div class="terminal-line">Type <span class="text-glowing">/help</span> to view all registered grid commands.</div>
+                <div class="terminal-line">&nbsp;</div>
+              </div>
+              <div class="terminal-input-row">
+                <span class="terminal-prompt">TABL@OMEGA_GRID:~$</span>
+                <input type="text" id="terminal-cli" autocomplete="off" spellcheck="false" placeholder="ENTER SYS CMD...">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: OPERATIONS -->
+        <section id="section-ops" class="content-section">
+          <div class="section-title-bar">
+            <span class="section-tag">[SEC_03]</span>
+            <h3 class="section-title">ACTIVE OPERATIONS</h3>
+          </div>
+          <p class="section-desc">Current missions, targets, and grid deployment tasks of the TABL command structure.</p>
+
+          <div class="ops-grid">
+            <div class="ops-card">
+              <div class="card-status-flag ongoing">ONGOING</div>
+              <div class="card-body">
+                <span class="card-id">OP-099 // NEXUS</span>
+                <h4 class="card-title">PROJECT NEXUS EXPANSION</h4>
+                <p class="card-text">Establishing secondary physical meeting hubs for high-level summits under deep cover.</p>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 74%"></div>
+                  <span class="progress-percentage">74%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ops-card">
+              <div class="card-status-flag active">STANDBY</div>
+              <div class="card-body">
+                <span class="card-id">OP-104 // DARK STAR</span>
+                <h4 class="card-title">DARK STAR ENCRYPTION</h4>
+                <p class="card-text">Upgrading regional routers to Quantum-Safe encryption schemas using CTO protocols.</p>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 42%"></div>
+                  <span class="progress-percentage">42%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ops-card">
+              <div class="card-status-flag completed">COMPLETED</div>
+              <div class="card-body">
+                <span class="card-id">OP-082 // CROWN-STONE</span>
+                <h4 class="card-title">OPERATION STONEWALL</h4>
+                <p class="card-text">Liquidation of excess assets and redistribution of cash-flow reserves to secure vaults.</p>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 100%"></div>
+                  <span class="progress-percentage">100%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: TABL CODEX -->
+        <section id="section-codex" class="content-section">
+          <div class="section-title-bar">
+            <span class="section-tag">[SEC_04]</span>
+            <h3 class="section-title">TABL CODEX</h3>
+          </div>
+          <p class="section-desc">Encrypted historical and doctrinal logs of the TABL system. Hover or tap entries to trigger decryption protocols.</p>
+
+          <div class="codex-list">
+            <div class="codex-item">
+              <div class="codex-meta">
+                <span class="codex-date">LOG_ENTRY #001</span>
+                <span class="codex-classification">[CLASSIFIED]</span>
+              </div>
+              <h4 class="codex-title" data-decrypt="FOUNDING AXIOMS">FOUNDING AXIOMS</h4>
+              <p class="codex-text" data-decrypt="TABL was formed under the premise of absolute fraternity, loyalty, and cryptographic secrecy. What resides in the grid stays in the grid. Our logo, the --x--, is the cross of secrecy, binding Zaid, Aniket, and Syed as a single unified force.">Hover over this entry to initiate data stream decryption and reveal the foundational values of the society...</p>
+            </div>
+
+            <div class="codex-item">
+              <div class="codex-meta">
+                <span class="codex-date">LOG_ENTRY #012</span>
+                <span class="codex-classification">[RESTRICTED]</span>
+              </div>
+              <h4 class="codex-title" data-decrypt="THE TRIANGLE PRINCIPLE">THE TRIANGLE PRINCIPLE</h4>
+              <p class="codex-text" data-decrypt="The triangle is the strongest shape in architecture and power dynamics. The Apex (Zaid Khan) channels direction and vision. The left base (Aniket Saini) stabilizes the foundation with resource flows. The right base (Syed M Jafri) executes digital structures and tech dominance. Together, they are indestructible.">Hover over this entry to trigger biometric security decryption and view structural dynamics...</p>
+            </div>
+
+            <div class="codex-item">
+              <div class="codex-meta">
+                <span class="codex-date">LOG_ENTRY #089</span>
+                <span class="codex-classification">[TOP SECRET]</span>
+              </div>
+              <h4 class="codex-title" data-decrypt="FUTURE OPS">FUTURE OPERATIONS</h4>
+              <p class="codex-text" data-decrypt="Preparations are underway for global grid expansion. Projecting integration of sub-level modules, local networks, and offline dead drops. Maintain maximum operational security until code status OMEGA-RED is declared by the CEO.">Hover over this entry to authorize security decryptor software and scan upcoming movements...</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- 3. SLIDING DOSSIER MODAL/PANEL -->
+  <div class="dossier-panel" id="dossier-panel">
+    <div class="dossier-header">
+      <div class="dossier-id-box">
+        <span class="label">TABL DOSSIER</span>
+        <h3 id="dossier-id">MEMBER_01</h3>
+      </div>
+      <button class="close-dossier" id="close-dossier" aria-label="Close Dossier Panel">
+        <!-- SVG Close Icon -->
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="dossier-scroll-area">
+      <!-- High-tech grid element -->
+      <div class="dossier-hud-graphics">
+        <div class="dossier-portrait">
+          <div class="scan-bar"></div>
+          <!-- Big stylized vector logo background -->
+          <svg class="tabl-logo portrait-logo-svg" viewBox="0 0 120 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="5" y1="12" x2="48" y2="12" />
+            <line x1="53" y1="5" x2="67" y2="19" />
+            <line x1="53" y1="19" x2="67" y2="5" />
+            <line x1="72" y1="12" x2="115" y2="12" />
+          </svg>
+        </div>
+        <div class="hud-stats-grid">
+          <div class="hud-stat-cell">
+            <span class="cell-label">AUTH_LVL</span>
+            <span class="cell-value text-glowing" id="dossier-auth">LEVEL 1</span>
+          </div>
+          <div class="hud-stat-cell">
+            <span class="cell-label">STATUS</span>
+            <span class="cell-value" id="dossier-status">ACTIVE</span>
+          </div>
+          <div class="hud-stat-cell">
+            <span class="cell-label">SECTOR</span>
+            <span class="cell-value" id="dossier-sector">HIGH COMMAND</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dossier-content-body">
+        <div class="dossier-group">
+          <span class="group-label">MEMBER NAME</span>
+          <h2 class="group-value text-glowing" id="dossier-name">ZAID KHAN</h2>
+        </div>
+
+        <div class="dossier-group">
+          <span class="group-label">RANK & RESPONSIBILITIES</span>
+          <h4 class="group-value" id="dossier-rank">CHIEF EXECUTIVE OFFICER (CEO)</h4>
+        </div>
+
+        <div class="dossier-group">
+          <span class="group-label">PERSONAL PROFILE & DOCTRINE</span>
+          <p class="group-text" id="dossier-desc">
+            Load profile descriptor...
+          </p>
+        </div>
+
+        <div class="dossier-group">
+          <span class="group-label">OPERATIONAL SKILLS</span>
+          <div class="skills-wrapper" id="dossier-skills">
+            <!-- Dynamic skills list -->
+          </div>
+        </div>
+
+        <div class="dossier-group">
+          <span class="group-label">CLASSIFIED FIELD MEMO</span>
+          <div class="memo-container">
+            <p id="dossier-memo">LOADING SECURE LOG ENTRY...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

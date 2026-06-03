@@ -1,0 +1,14 @@
+{
+  "name": "tabl-secure-grid",
+  "version": "1.0.0",
+  "description": "TABL Secret Society Grid Console",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080",
+    "dev": "npx http-server -p 8080 -c-1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
